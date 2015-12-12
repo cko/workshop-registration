@@ -1,0 +1,27 @@
+@(registrations: Seq[Registration])
+@import helper._
+
+@main("Registered Workshop Participants") {
+
+  <script type='text/javascript' src='@routes.Assets.versioned("javascripts/index.js")'></script>
+
+  <div class="row">
+    <div class="ten columns"><h2>JavaScript Workshop</h2><h4>Eingegangene Anmeldungen</h4></div>
+  </div>
+
+  <div class="row">
+
+
+    <table>
+        <thead><th>Name</th><th>E-Mail</th><th>Teilnahme</th></thead>
+        @for(registration <- registrations) {
+            <tr>
+                <td>@registration.name</td><td>@registration.email</td><td><input type="checkbox" data-name="@registration.name" value="schinken" id="check2"></td>
+            </tr>
+        }
+    </table>
+
+ 
+
+  </div>
+}

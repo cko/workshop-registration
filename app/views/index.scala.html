@@ -1,0 +1,58 @@
+@import controllers.user.CreateRegistrationForm
+@import controllers.user.RegistrationController
+@(registration: Form[CreateRegistrationForm])(implicit messages: Messages)
+
+@import helper._
+
+@main("Workshop Registration") {
+
+    <div class="row">
+        <div class="medium-10 columns">
+        In diesem Workshop geht es um die Grundlagen der Programmierung mit JavaScript.
+        Der Workshop bietet einen Überblick über die Programmiersprache JavaScript.
+        Es geht dabei um
+        <ul>
+          <li>Objektorientierte und funktionale Eigenschaften von JavaScript</li>
+          <li>Neuerungen in der aktuellen JavaScript Version EcmaScript 6</li>
+          <li>Tools rund um die Softwareentwicklung mit JavaScript</li>
+        </ul>
+        </div>
+        <div class="medium-2 columns">
+            <h4>5 freie Plätze</h4>
+            <br>
+            <h5>Location:</h5>
+            Cafe Netzwerk<br/>Luisenstraße 11<br/>80333 München <a href="http://www.openstreetmap.org/node/957531675">OpenStreetmap</a>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="medium-2 columns"></div>
+        <div class="medium-8 columns">
+            <h3>Anmeldung</h3>
+        @form(controllers.user.routes.RegistrationController.addRegistration()) {
+            @helper.inputText(registration("name"),
+                'id -> "name",
+                'class -> "ui-state-default",
+                'autocomplete -> "off",
+                'placeholder -> "Bitte Vorname & Nachname angeben",
+                '_label -> "Name"
+            )
+
+            @helper.inputText(registration("email"),
+                'id -> "email",
+                'class -> "ui-state-default",
+                'autocomplete -> "off",
+                'placeholder -> "Bitte E-Mail Adresse angeben",
+                '_label -> "E-Mail"
+            )
+
+            <div class="buttons">
+                <input type="submit" id="submit" value="Anmelden!"/>
+            </div>
+        }
+        </div>
+        <div class="medium-2 columns"></div>
+    </div>
+}
