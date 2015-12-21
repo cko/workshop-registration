@@ -1,10 +1,13 @@
-import dal.RegistrationRepository
-import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
-import play.api.Play
+package dal
+
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatestplus.play.OneAppPerSuite
+import org.scalatestplus.play.PlaySpec
+
+import play.api.Play
 
 
-class RegistrationRepositorySpec extends PlaySpec with ScalaFutures with OneAppPerSuite {//with Matchers {
+class RegistrationRepositorySpec extends PlaySpec with ScalaFutures with OneAppPerSuite {
 
   "RegistrationRepository" must {
     "store registrations" in {
