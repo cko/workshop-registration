@@ -25,7 +25,7 @@ class IntegrationSpec extends Specification {
 
     "display participant list for admin" in new WithBrowser(webDriver = WebDriverFactory(FIREFOX)) {
       browser.goTo("http://localhost:" + port + "/admin/registrations")
-      browser.pageSource must contain("Workshop Anmeldungen")
+      browser.pageSource must contain("Eingegangene Anmeldungen")
     }
   }
 }

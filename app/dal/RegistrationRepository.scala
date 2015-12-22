@@ -26,10 +26,6 @@ class RegistrationRepository @Inject() (dbConfigProvider: DatabaseConfigProvider
 
     private val registrations = TableQuery[RegistrationTable]
 
-    /**
-     * This is an asynchronous operation, it will return a future of the created person, which can be used to obtain the
-     * id for that person.
-     */
     def create(name: String, email: String): Future[Registration] = db.run {
       (registrations.map(p => (p.name, p.email))
         returning registrations.map(_.id)
