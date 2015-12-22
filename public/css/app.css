@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'fff_tusj';
+    src: url('FFF_Tusj.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+h1 {
+    font-family: 'fff_tusj';
+}
+
+
