@@ -16,6 +16,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "1.1.1",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
   "com.mohiva" %% "play-silhouette" % "3.0.4",
+  "com.adrianhurt" %% "play-bootstrap3" % "0.4.5-P24",
   "com.mohiva" %% "play-silhouette-testkit" % "3.0.4" % "test",
   "net.codingwell" %% "scala-guice" % "4.0.0",
   "net.ceedubs" %% "ficus" % "1.1.2",

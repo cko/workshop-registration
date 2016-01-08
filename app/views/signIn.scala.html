@@ -1,18 +1,18 @@
 @(signInForm: Form[forms.SignInForm.Data])(implicit request: RequestHeader, messages: Messages)
 
+@import b3.inline.fieldConstructor
 
-
-@main(Messages("sign.in.title")) {
+@main("Adminbereich") {
 
     <fieldset class="col-md-6 col-md-offset-3">
-        <legend>@Messages("sign.in.credentials")</legend>
+
         @helper.form(action = routes.CredentialsAuthController.authenticate()) {
-            b3.email(signInForm("email"), '_hiddenLabel -> Messages("email"), 'placeholder -> Messages("email"), 'class -> "form-control input-lg")
-            b3.password(signInForm("password"), '_hiddenLabel -> Messages("password"), 'placeholder -> Messages("password"), 'class -> "form-control input-lg")
-            b3.checkbox(signInForm("rememberMe"), '_text -> Messages("remember.me"), 'checked -> true)
+            @b3.email(signInForm("email"), '_hiddenLabel -> Messages("E-mail"), 'placeholder -> Messages("email"), 'class -> "form-control input-lg")
+            @b3.password(signInForm("password"), '_hiddenLabel -> Messages("Password"), 'placeholder -> Messages("password"), 'class -> "form-control input-lg")
+            @b3.checkbox(signInForm("rememberMe"), '_text -> Messages("remember.me"), 'checked -> true)
             <div class="form-group">
                 <div>
-                    <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("sign.in")</button>
+                    <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">Anmelden</button>
                 </div>
             </div>
         }
