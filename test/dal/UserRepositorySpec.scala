@@ -1,4 +1,4 @@
-package dal
+  package dal
 
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.PlaySpec
@@ -9,7 +9,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.User
 import java.util.UUID
 
-class UserRepositorySpec extends PlaySpec with ScalaFutures with OneAppPerSuite {
+class UserRepositorySpec extends BaseRepositorySpec {
   
     "UserRepository" must {
     "store users" in {

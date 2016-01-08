@@ -10,7 +10,7 @@ import models.User
 import java.util.UUID
 
 
-class PasswordInfoRepositorySpec extends PlaySpec with ScalaFutures with OneAppPerSuite {
+class PasswordInfoRepositorySpec extends BaseRepositorySpec {
 
   "PasswordInfoRepository" must {
     "store passwordInfo" in {

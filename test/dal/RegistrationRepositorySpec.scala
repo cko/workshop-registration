@@ -7,7 +7,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.Play
 
 
-class RegistrationRepositorySpec extends PlaySpec with ScalaFutures with OneAppPerSuite {
+class RegistrationRepositorySpec extends BaseRepositorySpec {
 
   "RegistrationRepository" must {
     "store registrations" in {

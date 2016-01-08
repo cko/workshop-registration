@@ -20,7 +20,8 @@ libraryDependencies ++= Seq(
   "com.mohiva" %% "play-silhouette-testkit" % "3.0.4" % "test",
   "net.codingwell" %% "scala-guice" % "4.0.0",
   "net.ceedubs" %% "ficus" % "1.1.2",
-  "com.h2database" % "h2" % "1.4.177"
+  "com.h2database" % "h2" % "1.4.177",
+  "org.xerial" % "sqlite-jdbc" % "3.8.11.2"
 )
 
 
