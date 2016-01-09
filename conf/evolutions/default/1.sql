@@ -8,4 +8,4 @@ create table "registrations" (
 
 # --- !Downs
 
-drop table "registrations" if exists;
+drop table "registrations";

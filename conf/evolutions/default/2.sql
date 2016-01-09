@@ -10,4 +10,4 @@ create table "passwordinfo" ("hasher" VARCHAR NOT NULL,"password" VARCHAR NOT NU
 drop table "passwordinfo";
 drop table "userlogininfo";
 drop table "logininfo";
-drop table "user";
+drop table "users";
