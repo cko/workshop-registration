@@ -11,3 +11,4 @@ project/target
 tmp
 dist
 .cache
+db.db

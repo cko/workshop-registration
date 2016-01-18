@@ -1,6 +1,6 @@
 @import controllers.user.CreateRegistrationForm
 @import controllers.user.RegistrationController
-@(registration: Form[CreateRegistrationForm])(implicit messages: Messages)
+@(registration: Form[CreateRegistrationForm], registrationEnabled: Boolean)(implicit messages: Messages)
 
 @import helper._
 
@@ -8,26 +8,24 @@
 
     <div class="row">
         <div class="medium-10 columns">
-        In diesem Workshop geht es um die Grundlagen der Programmierung mit JavaScript.
-        Der Workshop bietet einen Überblick über die Programmiersprache JavaScript.
-        Es geht dabei um
-        <ul>
-          <li>Objektorientierte und funktionale Eigenschaften von JavaScript</li>
-          <li>Neuerungen in der aktuellen JavaScript Version EcmaScript 6</li>
-          <li>Tools rund um die Softwareentwicklung mit JavaScript</li>
-        </ul>
+            Der Worshop bietet eine Einführung in JavaScript als Programmiersprache, sowie einen Überblick über Einsatzbereiche, Entwicklungstools und Vorgehensweisen.
+            <br/>
+            Voraussetzung: Grundlegende Programmierkenntnisse
+            <br/>
+            Anmeldung: Ab 22. Februar
+            <br/><br/>
+            noch 5 freie Plätze
         </div>
         <div class="medium-2 columns">
-            <h4>5 freie Plätze</h4>
-            <br>
             <h5>Location:</h5>
             Cafe Netzwerk<br/>Luisenstraße 11<br/>80333 München <a href="http://www.openstreetmap.org/node/957531675">OpenStreetmap</a>
         </div>
     </div>
 
 
-
+    
     <div class="row">
+        @if(registrationEnabled) {
         <div class="medium-2 columns"></div>
         <div class="medium-8 columns">
             <h3>Anmeldung</h3>
@@ -51,6 +49,9 @@
             <div class="buttons">
                 <input type="submit" id="submit" value="Anmelden!"/>
             </div>
+        }
+        } else {
+            Keine Anmeldung!
         }
         </div>
         <div class="medium-2 columns"></div>

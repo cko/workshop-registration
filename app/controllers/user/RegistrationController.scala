@@ -7,6 +7,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import play.api.Play
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -24,13 +25,24 @@ class RegistrationController @Inject() (repo: RegistrationRepository, val messag
   }
 
   def index = Action {
-    Ok(views.html.index(registrationForm))
+    //TODO write tests, add dates
+    val maxNumber = Play.current.configuration.getInt("workshop.maxnumber").get
+    val allRegistrations = repo.list().value
+    var currentNumber = 0
+    if (!allRegistrations.isEmpty){
+      currentNumber = allRegistrations.get.get.size
+    } 
+    
+    //val registrationStart = Play.current.configuration.getString("registration.start")
+    //val registrationEnd = Play.current.configuration.getString("registration.end")
+    val registrationEnabled = currentNumber < maxNumber
+    Ok(views.html.index(registrationForm, registrationEnabled))
   }
 
 
   def addRegistration = Action.async { implicit request =>
       registrationForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(Ok(views.html.index(formWithErrors))), //BadRequest(views.html.index(formWithErrors)),
+        formWithErrors => Future.successful(Ok(views.html.index(formWithErrors, true))), //BadRequest(views.html.index(formWithErrors)),
         registration => {
             repo.create(registration.name, registration.email).map { _ =>
               Ok(views.html.registration_successful(registration.name))
