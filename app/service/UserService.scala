@@ -1,21 +1,37 @@
 package service
 
-import java.util.UUID
+import java.text.SimpleDateFormat
+import java.util.{Calendar, Date}
 import javax.inject.Inject
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
-import play.api.libs.concurrent.Execution.Implicits._
+import org.apache.commons.lang3.time.DateUtils
+import play.api.Play
 import scala.concurrent.Future
 import com.mohiva.play.silhouette.api.services.IdentityService
-import dal.UserRepository
+import dal.{RegistrationRepository, UserRepository}
 import models.User
 
 
-class UserService @Inject() (userDAO: UserRepository) extends IdentityService[User] {
+class UserService @Inject() (val userRepo: UserRepository, val registrationRepo: RegistrationRepository) extends IdentityService[User] {
 
-  def retrieve(loginInfo: LoginInfo): Future[Option[User]] = userDAO.find(loginInfo)
+  def retrieve(loginInfo: LoginInfo): Future[Option[User]] = userRepo.find(loginInfo)
 
+  def save(user: User) = userRepo.save(user)
 
-  def save(user: User) = userDAO.save(user)
+  def isRegistrationEnabled:Boolean = {
+    val maxNumber = Play.current.configuration.getInt("workshop.maxnumber").get
+    val allRegistrations = registrationRepo.list().value
+    var currentNumber = 0
+    if (!allRegistrations.isEmpty){
+      currentNumber = allRegistrations.get.get.size
+    }
+    val format = new SimpleDateFormat("yyyy-MM-dd")
+    val registrationStart = Play.current.configuration.getString("registration.start")
+    val start = format.parse(registrationStart.get)
+    val registrationEnd = Play.current.configuration.getString("registration.end")
+    val end = format.parse(registrationEnd.get)
+    val now = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH)
+    currentNumber < maxNumber && end.after(now) && start.before(now)
+  }
 
 }

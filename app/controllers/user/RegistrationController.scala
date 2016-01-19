@@ -1,17 +1,23 @@
 package controllers.user
 
+import java.text.SimpleDateFormat
+import java.util.{Calendar, Date}
 import javax.inject.Inject
 
-import dal.RegistrationRepository
+import dal.{UserRepository, RegistrationRepository}
+import org.apache.commons.lang3.time.DateUtils
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.api.Play
+import service.UserService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegistrationController @Inject() (repo: RegistrationRepository, val messagesApi: MessagesApi)
+class RegistrationController @Inject() (val registrationRepo: RegistrationRepository, val userService: UserService, val messagesApi: MessagesApi)
                                        (implicit ec: ExecutionContext) extends Controller with I18nSupport {
 
   /**
@@ -26,16 +32,7 @@ class RegistrationController @Inject() (repo: RegistrationRepository, val messag
 
   def index = Action {
     //TODO write tests, add dates
-    val maxNumber = Play.current.configuration.getInt("workshop.maxnumber").get
-    val allRegistrations = repo.list().value
-    var currentNumber = 0
-    if (!allRegistrations.isEmpty){
-      currentNumber = allRegistrations.get.get.size
-    } 
-    
-    //val registrationStart = Play.current.configuration.getString("registration.start")
-    //val registrationEnd = Play.current.configuration.getString("registration.end")
-    val registrationEnabled = currentNumber < maxNumber
+    var registrationEnabled = userService.isRegistrationEnabled
     Ok(views.html.index(registrationForm, registrationEnabled))
   }
 
@@ -44,7 +41,7 @@ class RegistrationController @Inject() (repo: RegistrationRepository, val messag
       registrationForm.bindFromRequest().fold(
         formWithErrors => Future.successful(Ok(views.html.index(formWithErrors, true))), //BadRequest(views.html.index(formWithErrors)),
         registration => {
-            repo.create(registration.name, registration.email).map { _ =>
+            registrationRepo.create(registration.name, registration.email).map { _ =>
               Ok(views.html.registration_successful(registration.name))
           }
         }
