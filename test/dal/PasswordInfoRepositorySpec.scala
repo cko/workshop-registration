@@ -3,14 +3,14 @@ package dal
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import integration.BaseIntegrationSpec
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.Play
 import models.User
 import java.util.UUID
 
-
-class PasswordInfoRepositorySpec extends BaseRepositorySpec {
+class PasswordInfoRepositorySpec extends BaseIntegrationSpec {
 
   "PasswordInfoRepository" must {
     "store passwordInfo" in {

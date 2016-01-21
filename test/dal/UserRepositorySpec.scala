@@ -1,6 +1,7 @@
   package dal
 
-import org.scalatest.concurrent.ScalaFutures
+  import integration.BaseIntegrationSpec
+  import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.Play
@@ -9,7 +10,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.User
 import java.util.UUID
 
-class UserRepositorySpec extends BaseRepositorySpec {
+class UserRepositorySpec extends BaseIntegrationSpec {
   
     "UserRepository" must {
     "store users" in {

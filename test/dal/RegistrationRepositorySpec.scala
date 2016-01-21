@@ -1,5 +1,6 @@
 package dal
 
+import integration.BaseIntegrationSpec
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.OneAppPerSuite
 import org.scalatestplus.play.PlaySpec
@@ -7,7 +8,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.Play
 
 
-class RegistrationRepositorySpec extends BaseRepositorySpec {
+class RegistrationRepositorySpec extends BaseIntegrationSpec {
 
   "RegistrationRepository" must {
     "store registrations" in {

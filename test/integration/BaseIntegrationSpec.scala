@@ -1,14 +1,13 @@
-package dal
+package integration
 
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.OneAppPerSuite
 import org.scalatest.BeforeAndAfter
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import play.api.db.DBApi
 import play.api.db.evolutions.Evolutions
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.db.DBApi
 
-trait BaseRepositorySpec extends PlaySpec with ScalaFutures with OneAppPerSuite with BeforeAndAfter {
+trait BaseIntegrationSpec extends PlaySpec with ScalaFutures with OneAppPerSuite with BeforeAndAfter {
   
    lazy val appBuilder = new GuiceApplicationBuilder()
 
