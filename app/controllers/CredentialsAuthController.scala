@@ -41,7 +41,7 @@ class CredentialsAuthController @Inject() (
       data => {
         val credentials = Credentials(data.email, data.password)
         credentialsProvider.authenticate(credentials).flatMap { loginInfo =>
-          val result = Redirect(controllers.user.routes.RegistrationController.index())
+          val result = Redirect(controllers.admin.routes.AdministrationController.getRegistrations())
           userService.retrieve(loginInfo).flatMap {
             case Some(user) =>
               val c = configuration.underlying
