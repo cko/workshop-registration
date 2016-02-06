@@ -19,7 +19,7 @@ class UserService @Inject() (val userRepo: UserRepository, val registrationRepo:
   def save(user: User) = userRepo.save(user)
 
   def isRegistrationEnabled:Boolean = {
-    val maxNumber = Play.current.configuration.getInt("workshop.maxnumber").get
+    val maxNumber = Play.current.configuration.getInt("registration.maxnumber").get
     val allRegistrations = registrationRepo.list().value
     var currentNumber = 0
     if (!allRegistrations.isEmpty){
@@ -32,6 +32,12 @@ class UserService @Inject() (val userRepo: UserRepository, val registrationRepo:
     val end = format.parse(registrationEnd.get)
     val now = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH)
     currentNumber < maxNumber && end.after(now) && start.before(now)
+  }
+  
+  def maxNumberParticipants:Integer = {
+    val confMaxNumber =  Play.current.configuration.getInt("registration.maxnumber").get
+    var currentNumber = registrationRepo.count()
+    confMaxNumber - currentNumber
   }
 
 }

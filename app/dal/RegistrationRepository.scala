@@ -36,4 +36,12 @@ class RegistrationRepository @Inject() (dbConfigProvider: DatabaseConfigProvider
   def list(): Future[Seq[Registration]] = db.run {
     registrations.result
   }
+
+  def count(): Int = {
+    val optionCount = list().value
+    if (optionCount.isEmpty) return 0
+    optionCount.get.get.size
+  } 
+    
+  
 }
