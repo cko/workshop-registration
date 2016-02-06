@@ -21,7 +21,8 @@ libraryDependencies ++= Seq(
   "net.codingwell" %% "scala-guice" % "4.0.0",
   "net.ceedubs" %% "ficus" % "1.1.2",
   "com.h2database" % "h2" % "1.4.177",
-  "org.xerial" % "sqlite-jdbc" % "3.8.11.2"
+  "org.xerial" % "sqlite-jdbc" % "3.8.11.2",
+  "org.apache.pdfbox" % "pdfbox" % "2.0.0-RC3"
 )
 
 
