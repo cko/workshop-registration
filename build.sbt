@@ -22,7 +22,8 @@ libraryDependencies ++= Seq(
   "net.ceedubs" %% "ficus" % "1.1.2",
   "com.h2database" % "h2" % "1.4.177",
   "org.xerial" % "sqlite-jdbc" % "3.8.11.2",
-  "org.apache.pdfbox" % "pdfbox" % "2.0.0-RC3"
+  "org.apache.pdfbox" % "pdfbox" % "2.0.0-RC3",
+  "org.seleniumhq.selenium" % "selenium-java" % "2.48.2"
 )
 
 

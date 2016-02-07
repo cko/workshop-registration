@@ -37,16 +37,15 @@ class RegistrationController @Inject() (val registrationRepo: RegistrationReposi
     Ok(views.html.index(registrationForm, registrationEnabled, maxNumberParticipants))
   }
 
-
   def addRegistration = Action.async { implicit request =>
-      registrationForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(Ok(views.html.index(formWithErrors, true, 15))), //BadRequest(views.html.index(formWithErrors)),
-        registration => {
-            registrationRepo.create(registration.name, registration.email).map { _ =>
-              Ok(views.html.registration_successful(registration.name))
-          }
+    var maxNumberParticipants = userService.maxNumberParticipants
+    registrationForm.bindFromRequest().fold(
+      formWithErrors => Future.successful(Ok(views.html.index(formWithErrors, true, maxNumberParticipants))),
+      registration => {
+        registrationRepo.create(registration.name, registration.email).map { _ =>
+          Ok(views.html.registration_successful(registration.name))
         }
-      )
+      })
   }
 }
 
