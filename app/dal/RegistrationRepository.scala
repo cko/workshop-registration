@@ -37,11 +37,8 @@ class RegistrationRepository @Inject() (dbConfigProvider: DatabaseConfigProvider
     registrations.result
   }
 
-  def count(): Int = {
-    val optionCount = list().value
-    if (optionCount.isEmpty) return 0
-    optionCount.get.get.size
+  def count(): Future[Int] = {
+    list().map { registration => registration.size }
   } 
-    
-  
+
 }

@@ -10,9 +10,10 @@ import scala.concurrent.Future
 import com.mohiva.play.silhouette.api.services.IdentityService
 import dal.{RegistrationRepository, UserRepository}
 import models.User
+import scala.concurrent.ExecutionContext
 
 
-class UserService @Inject() (val userRepo: UserRepository, val registrationRepo: RegistrationRepository) extends IdentityService[User] {
+class UserService @Inject() (val userRepo: UserRepository, val registrationRepo: RegistrationRepository)(implicit ec: ExecutionContext) extends IdentityService[User]{
 
   def retrieve(loginInfo: LoginInfo): Future[Option[User]] = userRepo.find(loginInfo)
 
@@ -34,10 +35,8 @@ class UserService @Inject() (val userRepo: UserRepository, val registrationRepo:
     currentNumber < maxNumber && end.after(now) && start.before(now)
   }
   
-  def maxNumberParticipants:Integer = {
-    val confMaxNumber =  Play.current.configuration.getInt("registration.maxnumber").get
-    var currentNumber = registrationRepo.count()
-    confMaxNumber - currentNumber
+  def maxNumberParticipants:Future[Integer] = {
+    val confMaxNumber = Play.current.configuration.getInt("registration.maxnumber").get
+    registrationRepo.count().map { count => confMaxNumber - count }
   }
-
 }
