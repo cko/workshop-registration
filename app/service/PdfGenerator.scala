@@ -6,6 +6,9 @@ import java.io.File
 import org.apache.pdfbox.multipdf.PDFMergerUtility
 import java.io.ByteArrayOutputStream
 import java.io.ByteArrayInputStream
+import play.Play
+import play.api.Logger
+
 
 class PdfGenerator {
   
@@ -22,11 +25,9 @@ class PdfGenerator {
     joined.mergeDocuments(null)
   }*/
 
-  /*
+  
   def generatePdf(workshop: String, name: String): Array[Byte] = {
-    //TODO
-    var formSource = new File("")
-    var targetFile = "filled_form_" + name + ".pdf"
+    val formSource = Play.application.resourceAsStream("teilnehmer_formular.pdf")
     var document = PDDocument.load(formSource)
 
     var acroForm = document.getDocumentCatalog().getAcroForm()
@@ -38,13 +39,10 @@ class PdfGenerator {
       participantField.setValue(name)
     }
 
-    //document.save(targetFile)
-    //document.close()
-    //return targetFile
-
     var baos = new ByteArrayOutputStream();
     document.save(baos);
+    document.close()
     return baos.toByteArray();
   }
-  */
+  
 }
