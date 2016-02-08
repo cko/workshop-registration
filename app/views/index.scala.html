@@ -29,13 +29,16 @@
         <div class="medium-2 columns"></div>
         <div class="medium-8 columns">
             <h3>Anmeldung</h3>
-        @form(controllers.user.routes.RegistrationController.addRegistration()) {
+        @helper.form(action = controllers.user.routes.RegistrationController.addRegistration()) {
+        
             @helper.inputText(registration("name"),
                 'id -> "name",
                 'class -> "ui-state-default",
                 'autocomplete -> "off",
                 'placeholder -> "Bitte Vorname & Nachname angeben",
-                '_label -> "Name"
+                '_label -> "Name",
+                '_showConstraints -> false,
+                '_error -> "Force an error"
             )
 
             @helper.inputText(registration("email"),
@@ -43,7 +46,9 @@
                 'class -> "ui-state-default",
                 'autocomplete -> "off",
                 'placeholder -> "Bitte E-Mail Adresse angeben",
-                '_label -> "E-Mail"
+                '_label -> "E-Mail",
+                '_showConstraints -> false,
+                '_error -> "Force an error"
             )
 
             <div class="buttons">

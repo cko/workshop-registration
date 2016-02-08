@@ -43,7 +43,7 @@ class RegistrationController @Inject() (val registrationRepo: RegistrationReposi
       formWithErrors => userService.maxNumberParticipants.map { num => Ok(views.html.index(formWithErrors, true, num)) },
       registration => {
         registrationRepo.create(registration.name, registration.email).map { _ =>
-          Ok(views.html.registration_successful(registration.name))
+          Ok(views.html.registration_successful(registration.name, registration.email))
         }
       })
   }
