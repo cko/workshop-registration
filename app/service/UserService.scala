@@ -19,20 +19,30 @@ class UserService @Inject() (val userRepo: UserRepository, val registrationRepo:
 
   def save(user: User) = userRepo.save(user)
 
-  def isRegistrationEnabled:Boolean = {
+  def isRegistrationStarted:Boolean = {
+    val format = new SimpleDateFormat("yyyy-MM-dd")
+    val registrationStart = Play.current.configuration.getString("registration.start")
+    val start = format.parse(registrationStart.get)
+    val now = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH)
+    start.before(now)
+  }
+
+  def isNotBookedOut:Boolean = {
     val maxNumber = Play.current.configuration.getInt("registration.maxnumber").get
     val allRegistrations = registrationRepo.list().value
     var currentNumber = 0
     if (!allRegistrations.isEmpty){
       currentNumber = allRegistrations.get.get.size
     }
+    currentNumber <= maxNumber
+  }
+
+  def isNotOver:Boolean = {
     val format = new SimpleDateFormat("yyyy-MM-dd")
-    val registrationStart = Play.current.configuration.getString("registration.start")
-    val start = format.parse(registrationStart.get)
     val registrationEnd = Play.current.configuration.getString("registration.end")
     val end = format.parse(registrationEnd.get)
     val now = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH)
-    currentNumber < maxNumber && end.after(now) && start.before(now)
+    end.after(now)
   }
   
   def maxNumberParticipants:Future[Integer] = {
