@@ -4,7 +4,7 @@
 
 ### Build zip
 
-   ./activator dist 
+    ./activator dist 
 
 ### Generate application secret and start application
 

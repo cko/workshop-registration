@@ -8,25 +8,22 @@ import java.io.ByteArrayOutputStream
 import java.io.ByteArrayInputStream
 import play.Play
 import play.api.Logger
+import scala.collection.immutable.List
 
 
 class PdfGenerator {
   
-  /*
-   def concatDocuments = {
+   def generateDownloadPdf (participants : List[String], workshop: String): ByteArrayOutputStream = {
     var joined = new PDFMergerUtility()
-    //joined.addSource(generatePdf("Workshop 1", "name 1"))
-    //joined.addSource(generatePdf("Workshop 2", "name 2"))
-    joined.addSource(new ByteArrayInputStream(generatePdf("Workshop 1", "name 1")))
-    joined.addSource(new ByteArrayInputStream(generatePdf("Workshop 2", "name 2")))
-    //joined.setDestinationFileName("merged.pdf")
+    participants.foreach { p => joined.addSource(new ByteArrayInputStream(generateSinglePdf(workshop, p))) }    
     var colDocOutputstream = new ByteArrayOutputStream()
     joined.setDestinationStream(colDocOutputstream)
     joined.mergeDocuments(null)
-  }*/
+    colDocOutputstream
+  }
 
   
-  def generatePdf(workshop: String, name: String): Array[Byte] = {
+  def generateSinglePdf(workshop: String, name: String): Array[Byte] = {
     val formSource = Play.application.resourceAsStream("teilnehmer_formular.pdf")
     var document = PDDocument.load(formSource)
 
@@ -42,7 +39,7 @@ class PdfGenerator {
     var baos = new ByteArrayOutputStream();
     document.save(baos);
     document.close()
-    return baos.toByteArray();
+    baos.toByteArray();
   }
   
 }
