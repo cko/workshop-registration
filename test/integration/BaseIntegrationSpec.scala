@@ -16,6 +16,8 @@ trait BaseIntegrationSpec extends PlaySpec with ScalaFutures with OneAppPerSuite
   lazy val databaseApi = injector.instanceOf[DBApi]
   
   before {
+      // cleanup before to make sure DB is clean from BrowserSpec run
+      Evolutions.cleanupEvolutions(databaseApi.database("default"))
       Evolutions.applyEvolutions(databaseApi.database("default"))
   }
     
