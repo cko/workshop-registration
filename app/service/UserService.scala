@@ -24,7 +24,7 @@ class UserService @Inject() (val userRepo: UserRepository, val registrationRepo:
     val registrationStart = Play.current.configuration.getString("registration.start")
     val start = format.parse(registrationStart.get)
     val now = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH)
-    start.before(now)
+    start.before(now) || start.equals(now)
   }
 
   def isNotBookedOut:Boolean = {
