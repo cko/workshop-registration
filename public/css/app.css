@@ -13,4 +13,9 @@ h1 {
 	color: #FF0040;
 }
 
+footer {
+	 border-top: 1px solid rgba(10,10,10,.25);
+	 margin-top: 40px;
+}
+
 
