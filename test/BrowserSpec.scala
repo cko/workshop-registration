@@ -7,6 +7,8 @@ import play.api.test.Helpers._
 @RunWith(classOf[JUnitRunner])
 class BrowserSpec extends Specification {
 
+  skipAll // WebDriver doesn't work with Firefox 47
+
   "Application" should {
 
     "works from within a browser" in new WithBrowser(webDriver = WebDriverFactory(FIREFOX)) {
