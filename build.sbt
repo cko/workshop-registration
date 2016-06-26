@@ -64,4 +64,5 @@ maintainerScripts in Debian := maintainerScriptsAppend((maintainerScripts in Deb
 )
 javaOptions in Universal += "-Dpidfile.path=/var/run/workshop-registration/play.pid"
 javaOptions in Universal += "-Dconfig.file=conf/application.prod.conf"
+javaOptions in Universal += "-Djava.net.preferIPv4Stack=true"
 
