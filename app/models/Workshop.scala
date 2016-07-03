@@ -8,8 +8,7 @@ case class Workshop(
   id: Option[Long],
   regstart: String,
   regend: String,
-  regmax: Long,
+  regmax: Int,
   when: String,
   title: String,
   description: String)
-

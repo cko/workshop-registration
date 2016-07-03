@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext
 class ApiController @Inject() (repo: RegistrationRepository)(implicit ec: ExecutionContext) extends Controller {
 
   def getRegistrations = Action.async {
-    repo.list().map { registrations =>
+    repo.list(0).map { registrations =>
       Ok(Json.toJson(registrations));
     }
   }

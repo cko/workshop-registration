@@ -10,6 +10,9 @@ create table "workshops" (
   "description" text not null
 );
 
+alter table "registrations"
+  add column "workshop_id" integer default 0
+
 # --- !Downs
 
 drop table "workshops";

@@ -26,7 +26,7 @@ class WorkshopRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def regstart = column[String]("regstart")
     def regend = column[String]("regend")
-    def regmax = column[Long]("regmax")
+    def regmax = column[Int]("regmax")
     def when = column[String]("when")
     def title = column[String]("title")
     def description = column[String]("description")
@@ -43,9 +43,9 @@ class WorkshopRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
     workshops.result
   }
 
-  def active(): Future[Seq[Workshop]] = db.run {
+  def active(): Future[Workshop] = db.run {
     val now = Instant.now().toString()
-    workshops.filter(w => w.regstart < now && w.regend > now).result
+    workshops.filter(w => w.regstart < now && w.regend > now).result.head
   }
 
   def count(): Future[Int] = {

@@ -40,4 +40,6 @@
 
     UPDATE passwordinfo set password = '$2a$...' where loginInfoId = 1;
 
+### Add workshop
 
+    INSERT INTO workshops VALUES (1, '2016-07-01T00:00:00Z', '2016-08-01T00:00:00Z', 15, 'when',  'title', 'description');

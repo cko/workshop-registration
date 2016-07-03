@@ -1,33 +1,17 @@
 @import controllers.user.CreateRegistrationForm
 @import controllers.user.RegistrationController
-@(registration: Form[CreateRegistrationForm], notBookedOut: Boolean, notOver: Boolean, registrationStarted: Boolean, maxNumber: Integer)(implicit messages: Messages)
+@(registration: Form[CreateRegistrationForm], notBookedOut: Boolean, notOver: Boolean, registrationStarted: Boolean, freePlaces: Integer, workshop: Workshop)(implicit messages: Messages)
 
 @main("Workshop Registration") {
 
     <div class="row">
         <div class="medium-10 columns">
-			<h3>Einführung in JavaScript</h3>
-			Lange Zeit als Sprache für die Erstellung kleiner Webskripte belächelt, hat sich JavaScript mittlerweile zu einer Plattform mit einem 
-			breiten Einsatzgebiet entwickelt - von modernen Webfrontends über Backendanwendungen bis hin zu Spieleentwicklung und der Erstellung 
-			von Programmen für Microcontroller. Der Workshop bietet eine grundlegende Einführung in die Programmierung mit JavaScript und 
-			vermittelt die Grundlagen, um JavaScript für komplexe Anwendungen einsetzen zu können.<br/> 
-			In Absprache mit den Teilnehmern wird eine Auswahl der folgenden Themen behandelt:
-			<ul>
-			<li>Grundlagen der Sprache (Spracheigenschaften, Datentypen, Syntax)</li>
-			<li>Fortgeschrittene Konzepte von JavaScript (Objektorientierung, Funktionale Konstrukte)</li>
-			<li>Modularisierung</li>
-			<li>Versionen & Varianten (EcmaScript 5/6, Transpiler, Engines)</li>
-			<li>Testen & Codeanalyse (mocha.js, JSHint)</li>
-			<li>Buildskripte & Paketmanagement mit npm</li>
-			<li>IDEs und Editoren</li>
-			</ul>
-			Voraussetzung für die Teilnahme: Grundlegende Programmierkenntnisse.
-			<br/>
-			Für den Workshop ist ein eigenes Laptop notwendig.
+            <h3>@workshop.title</h3>
+            @workshop.description
             <br/>
-            Anmeldung: Ab 29. März
+            Anmeldung: Ab @workshop.regstart
             <br/><br/>
-            Es gibt noch @maxNumber freie Plätze
+            Es gibt noch @freePlaces freie Plätze
         </div>
         <div class="medium-2 columns">
             <h5>Location:</h5>

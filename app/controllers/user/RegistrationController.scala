@@ -16,13 +16,11 @@ import play.api.Play
 import service.UserService
 
 import scala.concurrent.{ExecutionContext, Future}
+import dal.WorkshopRepository
 
-class RegistrationController @Inject() (val registrationRepo: RegistrationRepository, val userService: UserService, val messagesApi: MessagesApi)
+class RegistrationController @Inject() (val registrationRepo: RegistrationRepository, val workshopRepo: WorkshopRepository, val userService: UserService, val messagesApi: MessagesApi)
                                        (implicit ec: ExecutionContext) extends Controller with I18nSupport {
 
-  /**
-   * The mapping for the person form.
-   */
   val registrationForm: Form[CreateRegistrationForm] = Form {
     mapping(
       "name" -> nonEmptyText,
@@ -32,30 +30,33 @@ class RegistrationController @Inject() (val registrationRepo: RegistrationReposi
 
   def index = Action.async {
     //TODO write tests, add dates
-    var notBookedOut = userService.isNotBookedOut
-    var notOver = userService.isNotOver
-    var registrationStarted = userService.isRegistrationStarted
-    var maxNumberParticipants = userService.maxNumberParticipants
-    maxNumberParticipants.map { num => Ok(views.html.index(registrationForm, notBookedOut, notOver, registrationStarted, num)) }
+    userService.isNotBookedOut zip userService.isNotOver zip userService.isRegistrationStarted zip userService.getFreePlaces zip workshopRepo.active map {
+      case ((((notBookedOut, notOver), registrationStarted), freePlaces), workshop) => Ok(views.html.index(registrationForm, notBookedOut, notOver, registrationStarted, freePlaces, workshop))
+    }
   }
 
   def addRegistration = Action.async { implicit request =>
-    var notBookedOut = userService.isNotBookedOut
-    var notOver = userService.isNotOver
-    var registrationStarted = userService.isRegistrationStarted
-    var maxNumberParticipants = userService.maxNumberParticipants
     registrationForm.bindFromRequest().fold(
-      formWithErrors => userService.maxNumberParticipants.map { num => Ok(views.html.index(formWithErrors, notBookedOut, notOver, registrationStarted, num)) },
-      registration => {
-        registrationRepo.create(registration.name, registration.email).map { _ =>
-          Ok(views.html.registration_successful(registration.name, registration.email))
+      formWithErrors => {
+        userService.isNotBookedOut zip userService.isNotOver zip userService.isRegistrationStarted zip userService.getFreePlaces zip workshopRepo.active map {
+          case ((((notBookedOut, notOver), registrationStarted), freePlaces), workshop) => Ok(views.html.index(formWithErrors, notBookedOut, notOver, registrationStarted, freePlaces, workshop))
         }
-      })
+      },
+      registration => {
+        workshopRepo.active().flatMap { workshop =>
+          {
+            registrationRepo.create(registration.name, registration.email, workshop.id.get).map { _ =>
+              Ok(views.html.registration_successful(registration.name, registration.email))
+            }
+          }
+        }
+      }
+    )
   }
 }
 
 /**
- * The create person form.
+ * The create registration form.
  *
  * Generally for forms, you should define separate objects to your models, since forms very often need to present data
  * in a different way to your models.  In this case, it doesn't make sense to have an id parameter in the form, since

@@ -17,28 +17,29 @@ class RegistrationRepository @Inject() (dbConfigProvider: DatabaseConfigProvider
   import dbConfig._
   import driver.api._
 
-    private class RegistrationTable(tag: Tag) extends Table[Registration](tag, "registrations") {
-      def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-      def name = column[String]("name")
-      def email = column[String]("email")
-      def * = (id, name, email) <> ((Registration.apply _).tupled, Registration.unapply)
-    }
-
-    private val registrations = TableQuery[RegistrationTable]
-
-    def create(name: String, email: String): Future[Registration] = db.run {
-      (registrations.map(p => (p.name, p.email))
-        returning registrations.map(_.id)
-        into ((nameAge, id) => Registration(id, nameAge._1, nameAge._2))
-        ) += (name, email)
-    }
-
-  def list(): Future[Seq[Registration]] = db.run {
-    registrations.result
+  private class RegistrationTable(tag: Tag) extends Table[Registration](tag, "registrations") {
+    def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+    def name = column[String]("name")
+    def email = column[String]("email")
+    def workshopId = column[Long]("workshop_id")
+    def * = (id, name, email, workshopId) <> ((Registration.apply _).tupled, Registration.unapply)
   }
 
-  def count(): Future[Int] = {
-    list().map { registration => registration.size }
+  private val registrations = TableQuery[RegistrationTable]
+
+  def create(name: String, email: String, workshopId: Long): Future[Registration] = db.run {
+    (registrations.map(p => (p.name, p.email, p.workshopId))
+      returning registrations.map(_.id)
+      into ((reg, id) => Registration(id, reg._1, reg._2, reg._3))
+      ) += (name, email, workshopId)
+  }
+
+  def list(workshopId: Long): Future[Seq[Registration]] = db.run {
+    registrations.filter(r => r.workshopId === workshopId).result
+  }
+
+  def count(workshopId: Long): Future[Int] = {
+    list(workshopId).map { registration => registration.size }
   } 
 
 }

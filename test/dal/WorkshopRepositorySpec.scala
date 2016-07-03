@@ -31,7 +31,7 @@ class WorkshopRepositorySpec extends BaseIntegrationSpec {
           var futureActive = repo.active()
 
           whenReady(futureActive) { result3 =>
-            result3.length mustBe (1)
+            result3.title == "JavaScript"
           }
         }
       }

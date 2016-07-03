@@ -1,52 +1,55 @@
 package service
 
-import java.text.SimpleDateFormat
-import java.util.{Calendar, Date}
-import javax.inject.Inject
-import com.mohiva.play.silhouette.api.LoginInfo
-import org.apache.commons.lang3.time.DateUtils
-import play.api.Play
-import scala.concurrent.Future
-import com.mohiva.play.silhouette.api.services.IdentityService
-import dal.{RegistrationRepository, UserRepository}
-import models.User
+import java.time.Instant
+
+import scala.annotation.implicitNotFound
 import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
+import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette.api.services.IdentityService
 
-class UserService @Inject() (val userRepo: UserRepository, val registrationRepo: RegistrationRepository)(implicit ec: ExecutionContext) extends IdentityService[User]{
+import dal.RegistrationRepository
+import dal.UserRepository
+import dal.WorkshopRepository
+import javax.inject.Inject
+import javax.inject.Singleton
+import models.User
+
+class UserService @Inject() (
+    val userRepo: UserRepository,
+    val registrationRepo: RegistrationRepository,
+    val workshopRepo: WorkshopRepository)(implicit ec: ExecutionContext) extends IdentityService[User] {
 
   def retrieve(loginInfo: LoginInfo): Future[Option[User]] = userRepo.find(loginInfo)
 
   def save(user: User) = userRepo.save(user)
 
-  def isRegistrationStarted:Boolean = {
-    val format = new SimpleDateFormat("yyyy-MM-dd")
-    val registrationStart = Play.current.configuration.getString("registration.start")
-    val start = format.parse(registrationStart.get)
-    val now = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH)
-    start.before(now) || start.equals(now)
+  def isRegistrationStarted:Future[Boolean] = {
+    workshopRepo.active().map { workshop => {
+      val start = Instant.parse(workshop.regstart)
+      Instant.now().isAfter(start)
+    } }
   }
 
-  def isNotBookedOut:Boolean = {
-    val maxNumber = Play.current.configuration.getInt("registration.maxnumber").get
-    val allRegistrations = registrationRepo.list().value
-    var currentNumber = 0
-    if (!allRegistrations.isEmpty){
-      currentNumber = allRegistrations.get.get.size
-    }
-    currentNumber <= maxNumber
+  def isNotBookedOut: Future[Boolean] = {
+    workshopRepo.active().flatMap { workshop => {
+      registrationRepo.count(workshop.id.get).map { count => 
+        count <= workshop.regmax }
+    } }
   }
 
-  def isNotOver:Boolean = {
-    val format = new SimpleDateFormat("yyyy-MM-dd")
-    val registrationEnd = Play.current.configuration.getString("registration.end")
-    val end = format.parse(registrationEnd.get)
-    val now = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH)
-    end.after(now)
+  def isNotOver:Future[Boolean] = {
+    workshopRepo.active().map { workshop => {
+      val end = Instant.parse(workshop.regend)
+      Instant.now().isBefore(end)
+    } }
   }
-  
-  def maxNumberParticipants:Future[Integer] = {
-    val confMaxNumber = Play.current.configuration.getInt("registration.maxnumber").get
-    registrationRepo.count().map { count => confMaxNumber - count }
+
+  def getFreePlaces:Future[Int] = {
+    workshopRepo.active().flatMap { workshop => {
+      registrationRepo.count(workshop.id.get).map { count => 
+        workshop.regmax - count }
+    } }
   }
 }
