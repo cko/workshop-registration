@@ -4,7 +4,7 @@ import DebianConstants._
 
 name := """workshop-registration"""
 
-version := "1.1"
+version := "1.2"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala, DebianPlugin)
 
@@ -13,7 +13,7 @@ scalaVersion := "2.11.6"
 resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
 
 libraryDependencies ++= Seq(
-  "org.scalatestplus" % "play_2.11" % "1.4.0-M4",
+  "org.scalatestplus" % "play_2.11" % "1.4.0-M4"% Test,
   cache,
   ws,
   specs2 % Test,
@@ -21,13 +21,13 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
   "com.mohiva" %% "play-silhouette" % "3.0.4",
   "com.adrianhurt" %% "play-bootstrap3" % "0.4.5-P24",
-  "com.mohiva" %% "play-silhouette-testkit" % "3.0.4" % "test",
+  "com.mohiva" %% "play-silhouette-testkit" % "3.0.4" % Test,
   "net.codingwell" %% "scala-guice" % "4.0.0",
   "net.ceedubs" %% "ficus" % "1.1.2",
   "com.h2database" % "h2" % "1.4.177",
   "org.xerial" % "sqlite-jdbc" % "3.8.11.2",
   "org.apache.pdfbox" % "pdfbox" % "2.0.0-RC3",
-  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1"
+  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % Test
 )
 
 
@@ -41,6 +41,7 @@ routesGenerator := InjectedRoutesGenerator
 javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
 
 // Debian package
+enablePlugins(JDebPackaging)
 enablePlugins(JavaAppPackaging)
 enablePlugins(JavaServerAppPackaging)
 serverLoading in Debian  := Systemd

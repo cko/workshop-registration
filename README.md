@@ -14,11 +14,9 @@
 
     ./activator run
 
-## Deployment
-
 ### Build zip
 
-    ./activator dist 
+    ./activator dist
 
 ### Generate application secret and start application
 
@@ -26,9 +24,24 @@
     export APPLICATION_SECRET=JWD...     
     ./bin/workshop-registration -Dplay.crypto.secret="JWD..."
 
+## Release and Deployment
+
+### Update version number in `build.sbt`
+
 ### Build deb
 
     ./activator debian:packageBin
+
+### Upload to Github
+
+### Copy to server
+
+### Install on server
+
+    cd /tmp
+    wget https://github.com/cko/workshop-registration/releases/download/v1.2/workshop-registration_1.2_all.deb
+    dpkg -i workshop-registration_1.2_all.deb
+
 
 ## Database commands
 
