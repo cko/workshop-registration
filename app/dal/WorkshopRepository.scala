@@ -43,9 +43,9 @@ class WorkshopRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
     workshops.result
   }
 
-  def active(): Future[Workshop] = db.run {
+  def active(): Future[Option[Workshop]] = db.run {
     val now = Instant.now().toString()
-    workshops.filter(w => w.regstart < now && w.regend > now).result.head
+    workshops.filter(w => w.regstart < now && w.regend > now).result.headOption
   }
 
   def count(): Future[Int] = {

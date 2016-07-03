@@ -15,6 +15,7 @@ import models.User
 import play.api.i18n.I18nSupport
 import play.api.i18n.MessagesApi
 import service.PdfGenerator
+import scala.concurrent.Future
 
 class AdministrationController @Inject() (
     val registrationRepo: RegistrationRepository,
@@ -24,11 +25,16 @@ class AdministrationController @Inject() (
     val env: Environment[User, CookieAuthenticator])(implicit ec: ExecutionContext) extends Silhouette[User, CookieAuthenticator] with I18nSupport {
 
   def getRegistrations = SecuredAction.async {
-    workshopRepo.active().flatMap { workshop => {
-      registrationRepo.list(workshop.id.get).map { registrations =>
+    workshopRepo.active().flatMap {
+      case Some(workshop) => {
+        registrationRepo.list(workshop.id.get).map { registrations =>
         Ok(views.html.registered(registrations))
+        }
       }
-    } }
+      case None => {
+        Future(Ok(views.html.noActiveWorkshop("")))
+      }
+    }
   }
   /*
   def getConfirmationPdf = SecuredAction.async{

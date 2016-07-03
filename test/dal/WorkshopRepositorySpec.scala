@@ -17,24 +17,31 @@ class WorkshopRepositorySpec extends BaseIntegrationSpec {
   "WorkshopRepository" must {
     "store workshops" in {
       var repo = Play.current.injector.instanceOf(classOf[WorkshopRepository])
-      var futureCreate = repo.insert(new Workshop(Option.empty,
+
+      var createFuture = repo.insert(new Workshop(Option.empty,
         Instant.now().minus(1L, DAYS).toString(),
-        Instant.now().plus(1L, DAYS).toString(), 
+        Instant.now().plus(1L, DAYS).toString(),
         15, "Sonntag, 17. April 13:00 - 18:00", "JavaScript", "bla"))
+      createFuture.futureValue mustBe 1
 
-      whenReady(futureCreate) { result1 =>
-        result1 mustBe (1)
-        var futureList = repo.list()
+      var listFuture = repo.list()
+      listFuture.futureValue.size mustBe 1
 
-        whenReady(futureList) { result2 =>
-          result2.length mustBe (1)
-          var futureActive = repo.active()
+      var countFuture = repo.count()
+      countFuture.futureValue mustBe 1
 
-          whenReady(futureActive) { result3 =>
-            result3.title == "JavaScript"
-          }
-        }
-      }
+      var activeFuture = repo.active()
+      activeFuture.futureValue.get.title == "JavaScript"
+    }
+
+    "return empty option if no active workshop" in {
+      var repo = Play.current.injector.instanceOf(classOf[WorkshopRepository])
+      repo.active().futureValue mustBe empty
+    }
+
+    "return empty list if no active workshop" in {
+      var repo = Play.current.injector.instanceOf(classOf[WorkshopRepository])
+      repo.list().futureValue mustBe empty
     }
   }
 }

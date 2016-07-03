@@ -26,30 +26,41 @@ class UserService @Inject() (
   def save(user: User) = userRepo.save(user)
 
   def isRegistrationStarted:Future[Boolean] = {
-    workshopRepo.active().map { workshop => {
-      val start = Instant.parse(workshop.regstart)
-      Instant.now().isAfter(start)
-    } }
+    workshopRepo.active().map {
+      case Some(workshop) => {
+        val start = Instant.parse(workshop.regstart)
+        Instant.now().isAfter(start)
+      }
+      case None => false
+    }
   }
 
   def isNotBookedOut: Future[Boolean] = {
-    workshopRepo.active().flatMap { workshop => {
-      registrationRepo.count(workshop.id.get).map { count => 
-        count <= workshop.regmax }
-    } }
+    workshopRepo.active().flatMap {
+      case Some(workshop) => {
+        registrationRepo.count(workshop.id.get).map { count => count <= workshop.regmax }
+      }
+      case None => Future(false)
+    }
   }
 
   def isNotOver:Future[Boolean] = {
-    workshopRepo.active().map { workshop => {
-      val end = Instant.parse(workshop.regend)
-      Instant.now().isBefore(end)
-    } }
+    workshopRepo.active().map {
+      case Some(workshop) => {
+        val end = Instant.parse(workshop.regend)
+        Instant.now().isBefore(end)
+      }
+      case None => false
+    }
   }
 
   def getFreePlaces:Future[Int] = {
-    workshopRepo.active().flatMap { workshop => {
-      registrationRepo.count(workshop.id.get).map { count => 
-        workshop.regmax - count }
-    } }
+    workshopRepo.active().flatMap {
+      case Some(workshop) => {
+        registrationRepo.count(workshop.id.get).map { count => 
+          workshop.regmax - count }
+      }
+      case None => Future(0)
+    }
   }
 }

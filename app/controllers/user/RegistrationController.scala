@@ -16,6 +16,7 @@ import play.api.Play
 import service.UserService
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.{None, Some}
 import dal.WorkshopRepository
 
 class RegistrationController @Inject() (val registrationRepo: RegistrationRepository, val workshopRepo: WorkshopRepository, val userService: UserService, val messagesApi: MessagesApi)
@@ -29,9 +30,17 @@ class RegistrationController @Inject() (val registrationRepo: RegistrationReposi
   }
 
   def index = Action.async {
-    //TODO write tests, add dates
-    userService.isNotBookedOut zip userService.isNotOver zip userService.isRegistrationStarted zip userService.getFreePlaces zip workshopRepo.active map {
-      case ((((notBookedOut, notOver), registrationStarted), freePlaces), workshop) => Ok(views.html.index(registrationForm, notBookedOut, notOver, registrationStarted, freePlaces, workshop))
+    workshopRepo.active() flatMap {
+      case Some(workshop) => {
+        userService.isNotBookedOut zip userService.isNotOver zip userService.isRegistrationStarted zip userService.getFreePlaces map {
+          case (((notBookedOut, notOver), registrationStarted), freePlaces) => {
+            Ok(views.html.index(registrationForm, notBookedOut, notOver, registrationStarted, freePlaces, workshop))
+          }
+        }
+      }
+      case None => {
+        Future(Ok(views.html.noActiveWorkshop("")))
+      }
     }
   }
 
@@ -39,13 +48,13 @@ class RegistrationController @Inject() (val registrationRepo: RegistrationReposi
     registrationForm.bindFromRequest().fold(
       formWithErrors => {
         userService.isNotBookedOut zip userService.isNotOver zip userService.isRegistrationStarted zip userService.getFreePlaces zip workshopRepo.active map {
-          case ((((notBookedOut, notOver), registrationStarted), freePlaces), workshop) => Ok(views.html.index(formWithErrors, notBookedOut, notOver, registrationStarted, freePlaces, workshop))
+          case ((((notBookedOut, notOver), registrationStarted), freePlaces), workshop) => Ok(views.html.index(formWithErrors, notBookedOut, notOver, registrationStarted, freePlaces, workshop.get))
         }
       },
       registration => {
         workshopRepo.active().flatMap { workshop =>
           {
-            registrationRepo.create(registration.name, registration.email, workshop.id.get).map { _ =>
+            registrationRepo.create(registration.name, registration.email, workshop.get.id.get).map { _ =>
               Ok(views.html.registration_successful(registration.name, registration.email))
             }
           }
