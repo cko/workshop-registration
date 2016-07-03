@@ -1,6 +1,6 @@
 package controller
 
-import integration.BaseIntegrationSpec
+import integration.BaseIntegrationAppSpec
 import play.api.test._
 import play.api.test.Helpers._
 import org.scalatestplus.play._
@@ -11,7 +11,7 @@ import java.time.Instant
 import java.time.temporal.TemporalUnit
 import java.time.temporal.ChronoUnit.DAYS
 
-class RegistrationControllerSpec extends BaseIntegrationSpec {
+class RegistrationControllerSpec extends BaseIntegrationAppSpec {
 
   "Index" must {
     "show that no workshop is active" in {

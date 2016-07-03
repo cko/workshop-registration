@@ -1,18 +1,13 @@
 package dal
 
-import integration.BaseIntegrationSpec
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.OneAppPerSuite
-import org.scalatestplus.play.PlaySpec
-
-import play.api.Play
-import models.Workshop
-import java.sql.Timestamp
 import java.time.Instant
-import java.time.temporal.TemporalUnit
 import java.time.temporal.ChronoUnit.DAYS
 
-class WorkshopRepositorySpec extends BaseIntegrationSpec {
+import integration.BaseIntegrationAppSpec
+import models.Workshop
+import play.api.Play
+
+class WorkshopRepositorySpec extends BaseIntegrationAppSpec {
 
   "WorkshopRepository" must {
     "store workshops" in {

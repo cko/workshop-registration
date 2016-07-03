@@ -1,9 +1,9 @@
 package service
 
-import integration.BaseIntegrationSpec
+import integration.BaseIntegrationAppSpec
 import play.api.Play
 
-class PdfGeneratorSpec extends BaseIntegrationSpec {
+class PdfGeneratorSpec extends BaseIntegrationAppSpec {
 
   "PdfGenerator" must {
     "generate single pdf" in {

@@ -4,14 +4,14 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.impl.util.BCryptPasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import integration.BaseIntegrationSpec
+import integration.BaseIntegrationAppSpec
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.Play
 import models.User
 import java.util.UUID
 
-class PasswordInfoRepositorySpec extends BaseIntegrationSpec {
+class PasswordInfoRepositorySpec extends BaseIntegrationAppSpec {
   
   val hasher = new BCryptPasswordHasher;
 

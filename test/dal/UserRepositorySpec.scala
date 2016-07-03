@@ -1,16 +1,15 @@
   package dal
 
-  import integration.BaseIntegrationSpec
-  import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.OneAppPerSuite
-import play.api.Play
-import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import models.User
 import java.util.UUID
 
-class UserRepositorySpec extends BaseIntegrationSpec {
+import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+
+import integration.BaseIntegrationAppSpec
+import models.User
+import play.api.Play
+
+class UserRepositorySpec extends BaseIntegrationAppSpec {
   
     "UserRepository" must {
     "store users" in {

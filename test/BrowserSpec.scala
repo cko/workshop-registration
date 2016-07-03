@@ -4,30 +4,40 @@ import org.junit.runner._
 import play.api.test._
 import play.api.test.Helpers._
 
-@RunWith(classOf[JUnitRunner])
-class BrowserSpec extends Specification {
+import org.scalatestplus.play._
+import integration.BaseIntegrationBrowserSpec
 
-  skipAll // WebDriver doesn't work with Firefox 47
 
-  "Application" should {
+class BrowserSpec extends BaseIntegrationBrowserSpec {
 
-    "works from within a browser" in new WithBrowser(webDriver = WebDriverFactory(FIREFOX)) {
-      browser.goTo("http://localhost:" + port)
-      browser.pageSource must contain("JavaScript Workshop")
+  "Application" must {
+
+    "show no workshop if no workshop is active" in {
+      go to "http://localhost:" + port
+      pageSource must include ("Zur Zeit ist kein Workshop geplant.")
     }
 
-    "register new participant" in new WithBrowser(webDriver = WebDriverFactory(FIREFOX)) {
-      browser.goTo("http://localhost:" + port)
-      browser.pageSource must contain("Anmeldung")
-      browser.fill("#email").`with`("test@example.com")
-      browser.fill("#name").`with`("John Doe")
-      browser.submit("#submit")
-      browser.pageSource must contain("John Doe")
+    "show registration page if workshop is active" in {
+      createWorkshop()
+      go to "http://localhost:" + port
+      pageSource must include ("Einführung in JavaScript")
     }
 
-    "display participant list for admin" in new WithBrowser(webDriver = WebDriverFactory(FIREFOX)) {
-      browser.goTo("http://localhost:" + port + "/admin/registrations")
-      browser.pageSource must contain("Authentication required")
+    "register new participant if workshop is active" in {
+      createWorkshop()
+      go to "http://localhost:" + port
+      pageSource must include ("Anmeldung")
+
+      textField("email").value = "test@example.com"
+      textField("name").value = "John Doe"
+      submit()
+      pageSource must include ("Anmeldung wurde gespeichert")
+      pageSource must include ("John Doe")
+    }
+
+    "display participant list for admin" in  {
+      go to ("http://localhost:" + port + "/admin/registrations")
+      pageSource must include ("Authentication required")
     }
   }
 }
