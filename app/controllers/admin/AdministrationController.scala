@@ -16,6 +16,8 @@ import play.api.i18n.I18nSupport
 import play.api.i18n.MessagesApi
 import service.PdfGenerator
 import scala.concurrent.Future
+import play.api.Logger
+
 
 class AdministrationController @Inject() (
     val registrationRepo: RegistrationRepository,
@@ -36,18 +38,15 @@ class AdministrationController @Inject() (
       }
     }
   }
-  /*
-  def getConfirmationPdf = SecuredAction.async{
-    val participants = List("")
-    //FIXME
+
+  
+  def getConfirmationPdf = SecuredAction.async {
+    // FIXME
+    val participants = List("test")
     val workshop = "Dummy-workshop"
     val pdfOutputStream = pdfGenerator.generateDownloadPdf(participants, workshop)
-    val pdfContent = new File("")  
-    
-     var fos = new FileOutputStream (pdfContent); 
-     pdfOutputStream.writeTo(fos);
-  
-    Ok.sendFile(pdfContent, false, fileName = _ => "teilnahmebestaetigungen.pdf")
-  }*/
+   
+    Future(Ok(pdfOutputStream.toByteArray()).as("application/pdf")); 
+  }
 }
 

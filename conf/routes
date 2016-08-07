@@ -14,5 +14,6 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 
 GET     /admin/registrations        controllers.admin.AdministrationController.getRegistrations
+GET     /admin/pdf                  controllers.admin.AdministrationController.getConfirmationPdf
 
 POST    /authenticate/credentials   controllers.CredentialsAuthController.authenticate
