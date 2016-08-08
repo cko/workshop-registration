@@ -9,11 +9,12 @@ import java.io.ByteArrayInputStream
 import play.Play
 import play.api.Logger
 import scala.collection.immutable.List
+import org.apache.pdfbox.pdmodel.interactive.form.PDField
 
 
 class PdfGenerator {
   
-   def generateDownloadPdf (participants : List[String], workshop: String): ByteArrayOutputStream = {
+   def generateDownloadPdf (participants : Seq[String], workshop: String): ByteArrayOutputStream = {
     var joined = new PDFMergerUtility()
     participants.foreach { p => joined.addSource(new ByteArrayInputStream(generateSinglePdf(workshop, p))) }    
     var colDocOutputstream = new ByteArrayOutputStream()
@@ -28,6 +29,7 @@ class PdfGenerator {
     var document = PDDocument.load(formSource)
 
     var acroForm = document.getDocumentCatalog().getAcroForm()
+
     if (acroForm != null) {
       var workshopField = acroForm.getField("workshop")
       workshopField.setValue(workshop)

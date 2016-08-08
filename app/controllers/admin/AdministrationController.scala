@@ -39,14 +39,19 @@ class AdministrationController @Inject() (
     }
   }
 
-  
   def getConfirmationPdf = SecuredAction.async {
-    // FIXME
-    val participants = List("test")
-    val workshop = "Dummy-workshop"
-    val pdfOutputStream = pdfGenerator.generateDownloadPdf(participants, workshop)
-   
-    Future(Ok(pdfOutputStream.toByteArray()).as("application/pdf")); 
+    workshopRepo.active().flatMap {
+      case Some(workshop) => {
+        registrationRepo.list(workshop.id.get).map { registrations =>
+          val pdfOutputStream = pdfGenerator.generateDownloadPdf(registrations.map { reg => reg.name }, workshop.title)
+          Ok(pdfOutputStream.toByteArray()).as("application/pdf")
+        }
+      }
+      case None => {
+        Future(Ok(views.html.noActiveWorkshop("")))
+      }
+    }
+
   }
 }
 
