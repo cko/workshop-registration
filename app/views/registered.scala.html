@@ -12,6 +12,7 @@
 
   <div class="row">
 
+    @helper.form(action = controllers.admin.routes.AdministrationController.getConfirmationPdf()) {
 
     <table>
         <thead><th>Name</th><th>E-Mail</th><th>Teilnahme</th></thead>
@@ -22,7 +23,10 @@
         }
     </table>
 
- 
+             <div class="buttons">
+                <input type="submit" id="submit" value="Teilnehmerzertifikate generieren"/>
+            </div>
+     }
 
   </div>
 }
