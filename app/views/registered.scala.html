@@ -1,24 +1,26 @@
-@(registrations: Seq[Registration])
+
 @import helper._
+@import controllers.admin.ParticipantsForm
+
+@(participantsForm: Form[ParticipantsForm], registrations: Seq[Registration])(implicit messages: Messages)
+
 
 @main("Registered Workshop Participants") {
-
   <script type='text/javascript' src='@routes.Assets.versioned("javascripts/index.js")'></script>
-
   <div class="row">
     <div class="large-2 large-offset-11 columns"><a href="/signOut">Logout</a></div>
     <div class="ten columns"><h4>Eingegangene Anmeldungen</h4></div>
   </div>
-
   <div class="row">
-
     @helper.form(action = controllers.admin.routes.AdministrationController.getConfirmationPdf()) {
 
     <table>
         <thead><th>Name</th><th>E-Mail</th><th>Teilnahme</th></thead>
         @for(registration <- registrations) {
             <tr>
-                <td>@registration.name</td><td>@registration.email</td><td><input type="checkbox" data-name="@registration.name" value="schinken" id="check2"></td>
+                <td>@registration.name</td>
+                <td>@registration.email</td>
+                <td><input type="checkbox" data-name="" value="@registration.name" id="check2"></td>
             </tr>
         }
     </table>

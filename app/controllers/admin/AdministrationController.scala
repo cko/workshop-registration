@@ -12,6 +12,8 @@ import dal.WorkshopRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 import models.User
+import play.api.data.Form
+import play.api.data.Forms._
 import play.api.i18n.I18nSupport
 import play.api.i18n.MessagesApi
 import service.PdfGenerator
@@ -25,12 +27,20 @@ class AdministrationController @Inject() (
     val pdfGenerator: PdfGenerator,
     val messagesApi: MessagesApi,
     val env: Environment[User, CookieAuthenticator])(implicit ec: ExecutionContext) extends Silhouette[User, CookieAuthenticator] with I18nSupport {
+ 
+  
+ val participantsForm: Form[ParticipantsForm] = Form {
+    mapping(
+      "name" -> list(text)
+    )(ParticipantsForm.apply)(ParticipantsForm.unapply)
+  }
+  
 
   def getRegistrations = SecuredAction.async {
     workshopRepo.active().flatMap {
       case Some(workshop) => {
         registrationRepo.list(workshop.id.get).map { registrations =>
-        Ok(views.html.registered(registrations))
+        Ok(views.html.registered(participantsForm, registrations))
         }
       }
       case None => {
@@ -55,3 +65,4 @@ class AdministrationController @Inject() (
   }
 }
 
+case class ParticipantsForm(participants: List[String])
